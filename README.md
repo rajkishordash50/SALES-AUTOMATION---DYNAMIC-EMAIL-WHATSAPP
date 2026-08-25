@@ -47,3 +47,6 @@ Workflow executes 100% green with 5 items branched. Dynamic insertion logic work
 - Dual-channel (Email + WhatsApp) increases renewal conversion
 - Meets all Exercise 1 requirements + valuable add-on feature
 
+HERE IS WORKFLOW IMAGE LINK =
+
+https://github.com/rajkishordash50/SALES-AUTOMATION---DYNAMIC-EMAIL-WHATSAPP/blob/main/WhatsApp%20Image%202026-08-25%20at%207.04.31%20AM%20(1).jpeg
