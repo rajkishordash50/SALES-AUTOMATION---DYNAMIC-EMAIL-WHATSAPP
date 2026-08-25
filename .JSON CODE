@@ -1,0 +1,295 @@
+{
+  "name": "Sales Automation Email and whatsapp  follow up cop",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nI am Data Analyst Agent . How can I assist you today?",
+        "options": {
+          "inputPlaceholder": "Type your question..",
+          "responseMode": "lastNode"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -80,
+        0
+      ],
+      "id": "4b995579-c9d4-499d-94a1-2dd69c78d7f7",
+      "name": "When chat message received",
+      "webhookId": "a7fc5cb4-98c6-4384-bfe8-c74a339bd210"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful assistant"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        144,
+        -16
+      ],
+      "id": "68c1b87a-a207-426b-b9d0-91c0d0748cd3",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        16,
+        208
+      ],
+      "id": "d961320b-d723-4ea2-8cf0-cb4f59d42df6",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SBZ00Lxd6aUWrddj",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        176,
+        192
+      ],
+      "id": "d99cf2ad-a604-45d9-9f49-6e30df372c92",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1nCPobijZN6KdcH6RNNLDRBEGRgGdjk6ixZwZHZOx7nk",
+          "mode": "list",
+          "cachedResultName": "sales automation email & whatsapp follow up",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nCPobijZN6KdcH6RNNLDRBEGRgGdjk6ixZwZHZOx7nk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nCPobijZN6KdcH6RNNLDRBEGRgGdjk6ixZwZHZOx7nk/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        320,
+        128
+      ],
+      "id": "fbacf03c-5905-4688-a74a-a0d8c547781e",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fAkqcgMsYYKXIxY8",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['Contact Person Email'] }}",
+        "subject": "=Hello  {{ $json['Contact Person Name'] }}",
+        "message": "=Hello {{ $json['Contact Person Name'] }} ,\n\nYour {{ $json.Service }} proposal is expiring in 2 months . kindly get in touch with us to avail the best \noffers and support for renewal. \nRegards, \nSales Team \n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        0
+      ],
+      "id": "89b5a9e9-9aa3-4009-9553-4207ff34a020",
+      "name": "Send a message1",
+      "webhookId": "78779e18-610d-43c6-aa42-5404feaa15b5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "DGo1sEaDKalxJY2v",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "from": "+1 (737) 250-8034",
+        "to": "whatsapp:+917735722275",
+        "toWhatsapp": true,
+        "message": "HI",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        896,
+        0
+      ],
+      "id": "5c6fca02-69fa-45e9-af05-cdbd66d16ebd",
+      "name": "Send an SMS/MMS/WhatsApp message",
+      "credentials": {
+        "twilioApi": {
+          "id": "LSxDrc5aoPkut8u9",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.twilio.com/2010-04-01/Accounts/ACf51ceabbd60d3e632fb846327942593b/Messages.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "From",
+              "value": "whatsapp:+14155238886"
+            },
+            {
+              "name": "To",
+              "value": "whatsapp:+917735722275"
+            },
+            {
+              "name": "Body",
+              "value": "Test"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        704,
+        0
+      ],
+      "id": "b2035c94-4809-4fb7-be36-c381520a806e",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "T3d9bzEbv8Mqha5q",
+          "name": "Unnamed credential"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an SMS/MMS/WhatsApp message": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "76cc5778-9a8f-4a92-a1cd-3413bf7ac539",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "11f2e1a768ea1a80ebfd29373f7d7273e51b1b2a298e95272adc1b0144295dac"
+  },
+  "nodeGroups": [],
+  "id": "mVdL0NWlsxWkC0FE",
+  "tags": []
+}
